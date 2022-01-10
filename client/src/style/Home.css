@@ -1,0 +1,66 @@
+.feeld{
+    width: 100%;
+    height: 90vh;
+    display: flex;
+
+    align-items: center;
+    padding-top: 10px;
+    
+}
+.feeld-left{
+    display: flex;
+    justify-content: center;
+
+   
+    width: 100%; 
+  
+}
+.feeld-right{
+    width: 100%;
+
+}
+.f{
+    /* position: absolute; */
+  
+}
+.black{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    /* padding: 30px; */
+    background-color: white;
+    width: 350px;
+    height: 400px;
+    padding: 36px;
+    box-shadow: 0px 20px 50px rgb(0 0 0 / 10%);
+}
+.blankPhoto{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.blankPhoto img{
+    height: 95%;
+    width: 95%;
+    border-radius: 15px;
+    transition: 0.3s;
+  
+}
+.blankPhoto img:hover{
+    height: 100%;
+    width: 100%;
+}
+.dis{
+    width: 350px;
+    font-size: 50px;
+    font-weight: 500;
+
+}
+.e{
+    height: 40px;
+    margin-top: 20px;
+    margin-right: 15px;
+}
