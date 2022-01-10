@@ -4,3 +4,7 @@ body{
     width: 100%;
     font-family: 'Roboto', sans-serif;
 }
+p,ul{
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}

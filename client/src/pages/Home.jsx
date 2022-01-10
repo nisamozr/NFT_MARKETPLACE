@@ -1,11 +1,11 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
+// import Navbar from '../components/Navbar'
 import "../style/Home.css"
 
 function Home() {
     return (
         <div>
-          <Navbar/>
+        
           <div className="feeld">
               <div className="feeld-left">
                   <div className="black">
