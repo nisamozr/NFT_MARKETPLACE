@@ -1,6 +1,7 @@
 import React from 'react'
 import "../style/Navbar.css"
 // import {} from  "../../public"
+import {Link, NavLink} from "react-router-dom"
 
 function Navbar() {
     return (
@@ -19,12 +20,18 @@ function Navbar() {
                     </div>
                 </div>
                 <ul className="link">
-                    <li>Home</li>
-                    <li>Explore</li>
+                    <li> <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : 'link')} activeStyle={{color:'red'}}>Home</NavLink></li>
+                    <li><NavLink to="/explore" className={({ isActive }) => (isActive ? 'active' : 'link')}>Explore </NavLink></li>
 
                 </ul>
-                <button className="btn1">Create</button>
-                <button className="btn2">Connect Wallet</button>
+                <Link to="/" className="btn1">Create</Link>
+              
+                    <button className="btn2 connect">  Connect Wallet</button>
+               
+                
+              
+                {/* <button className="btn1">Create</button>
+                <button className="btn2">Connect Wallet</button> */}
             </div>
             
         </div>
