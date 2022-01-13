@@ -1,15 +1,12 @@
 import React from 'react'
 import Card from '../components/Card'
-// import Navbar from '../components/Navbar'
-import "../style/Card.css"
 
-function Explore() {
+function Collection() {
     return (
         <div>
-         
-            <div className="collotion">
+             <div className="collotion">
                 <div className="container">
-                    <h3>NFT's</h3>
+                    <h3>My NFT Collection</h3>
                 <div className="row">
                     <Card/>
                     <Card/>
@@ -20,6 +17,7 @@ function Explore() {
                     <Card/>
                     <Card/>
                     <Card/>
+                    
 
                 </div>
                 </div>
@@ -30,4 +28,4 @@ function Explore() {
     )
 }
 
-export default Explore
+export default Collection
