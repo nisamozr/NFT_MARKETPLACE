@@ -1,22 +1,16 @@
 import React from 'react'
-import Card from '../components/Card'
+import Card from '../components/CardSales'
 
 function Collection() {
     return (
-        <div>
+        <div className="news">
              <div className="collotion">
                 <div className="container">
                     <h3>My NFT Collection</h3>
                 <div className="row">
                     <Card/>
                     <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
+                 
                     
 
                 </div>

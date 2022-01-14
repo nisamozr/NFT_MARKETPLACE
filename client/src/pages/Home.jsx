@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 // import Navbar from '../components/Navbar'
 import "../style/Home.css"
 
@@ -23,8 +24,8 @@ function Home() {
 
                       </div>
                       <div className="but">
-                      <button className="btn1 e">Create</button>
-                      <button className="btn2 e">Create</button>
+                     <Link to="/mint" > <button className="btn1 e">Create</button> </Link>
+                     <Link to="/explore"> <button className="btn2 e">Explore</button></Link>
                       </div>
                   </div>
 

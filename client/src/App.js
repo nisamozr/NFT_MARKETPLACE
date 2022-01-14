@@ -6,6 +6,7 @@ import Explore from './pages/Explore'
 import Navbar from './components/Navbar'
 import Create from './pages/Create'
 import Collection from './pages/Collection'
+import Nft from './pages/Nft'
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
          
           </Route>
           <Route path="/mycollection" element={<Collection/>}>
+         
+         </Route>
+         <Route path="/view" element={<Nft/>}>
          
          </Route>
         </Routes>

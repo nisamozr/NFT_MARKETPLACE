@@ -1,0 +1,56 @@
+.nftbox{
+    width: 100%;
+    /* background-color: #F2F2F2;  */
+    padding: 50px;
+    /* box-shadow: 0px 20px 50px rgb(1 1 0 / 19%);   */
+    /* height: auto; */
+    border-radius: 15px;
+
+}
+
+.nftbox img{
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0px 20px 50px rgb(1 1 0 / 19%);     
+
+}
+
+.nftDes{
+    padding-top: 50px;
+  
+    
+
+}
+.cont{
+    padding: 30px;
+    border-radius: 10px;
+    /* background-color: #F2F2F2; */
+    border: 1px solid #999;
+    margin-bottom: 15px;
+    
+
+}
+.cont h2{
+    font-size: 40px;
+    font-weight: bolder;
+    color: black;
+}
+.owner{
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid #999;
+    margin-bottom: 15px;
+
+}
+.owner h4{
+   color: black;
+}
+.buy{
+    display: flex;
+    justify-content: space-around;
+    color: black;
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid #999;
+
+}

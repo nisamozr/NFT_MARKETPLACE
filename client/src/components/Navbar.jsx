@@ -16,7 +16,7 @@ function Navbar() {
                         <input type="text" name="" placeholder="Search" id="" />
                     </div>
                     <div className="serchButton">
-                    <i class="fas fa-search"></i>
+                    <i className="fas fa-search"></i>
                     </div>
                 </div>
                 <ul className="link">
