@@ -1,0 +1,15 @@
+.error{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+}
+.error img{
+    width: 100%;
+    margin-bottom: 30px;
+}
+.error button{
+
+}

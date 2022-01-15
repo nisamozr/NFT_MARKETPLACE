@@ -2,14 +2,15 @@
     width: 100%;
     height: 90vh;
     display: flex;
+    justify-content: space-between;
 
     align-items: center;
-    padding-top: 10px;
+    /* padding-top: 10px; */
     
 }
 .feeld-left{
-    display: flex;
-    justify-content: center;
+    /* display: flex; */
+    /* justify-content: center; */
 
    
     width: 100%; 
@@ -26,13 +27,13 @@
 .black{
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
     border-radius: 15px;
     /* padding: 30px; */
     background-color: white;
-    width: 350px;
-    height: 400px;
-    padding: 36px;
+    width: 450px;
+    height: 450px;
+    padding: 20px;
     box-shadow: 0px 20px 50px rgb(0 0 0 / 10%);
 }
 .blankPhoto{

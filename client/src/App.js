@@ -7,6 +7,7 @@ import Navbar from './components/Navbar'
 import Create from './pages/Create'
 import Collection from './pages/Collection'
 import Nft from './pages/Nft'
+import Error from './pages/Error'
 
 function App() {
   return (
@@ -29,7 +30,9 @@ function App() {
          <Route path="/view" element={<Nft/>}>
          
          </Route>
+         <Route path="*" element={<Error/>}/>
         </Routes>
+        
       </div>
     </Router>
   )
