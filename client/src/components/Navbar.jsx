@@ -4,7 +4,7 @@ import "../style/Navbar.css"
 import {Link, NavLink} from "react-router-dom"
 // import {} from "re"
 
-function Navbar() {
+function Navbar({connet,account}) {
     const [click, setclick] = useState(false)
     function handleClick(){
         setclick(!click)
@@ -37,7 +37,7 @@ function Navbar() {
                 </ul>
                 <Link to="/mint" className="btn1">Create</Link>
               
-               <button className="btn2 connect">Connect Wallet</button>
+               <button className="btn2 connect" onClick={connet}>{ account? account:"Connect Wallet"}</button>
                
                 
               
