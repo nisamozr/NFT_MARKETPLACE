@@ -6,7 +6,7 @@ const nftmarketplace = artifacts.require("NFTmarketplace");
 module.exports = function(_deployer, network, accounts) {
   // Use deployer to state migration tasks.
   // const userAddress = accounts[0];
-  _deployer.deploy(nftmarketplace ).then(()=>{
+  _deployer.deploy(nftmarketplace).then(()=>{
    return _deployer.deploy(nft, nftmarketplace.address)
   })
 };

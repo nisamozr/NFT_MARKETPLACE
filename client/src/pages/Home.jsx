@@ -28,7 +28,7 @@ function Home() {
               <div className="f">
                 <div className="dis">The Pretty Fantasy World of Mine</div>
                 <div className="but">
-                  <Link to="/mint">
+                  <Link to="/create">
                     {' '}
                     <button className="btn1 e">Create</button>{' '}
                   </Link>

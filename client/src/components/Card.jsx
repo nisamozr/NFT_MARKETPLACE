@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import "../style/Card.css"
 
-function Card() {
+function Card({data}) {
     return (
         <div className=" col-md-12 col-lg-4  ">
             
@@ -13,7 +13,7 @@ function Card() {
                 <h3>Cryto pung #425</h3>
                 <div className="pro">
                     <div className="c">
-                    <p>5.70 ETH</p>
+                    <p>{data} ETH</p>
                     </div>
                     
                     <button className="btn1 fg">Buy</button>

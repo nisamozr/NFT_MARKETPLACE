@@ -35,7 +35,7 @@ function Navbar({connet,account}) {
                     <li><NavLink to="/mycollection" className={({ isActive }) => (isActive ? 'active' : 'link')}>My Collection </NavLink></li>
                 
                 </ul>
-                <Link to="/mint" className="btn1">Create</Link>
+                <Link to="/create" className="btn1">Create</Link>
               
                <button className="btn2 connect" onClick={connet}>{ account? account:"Connect Wallet"}</button>
                

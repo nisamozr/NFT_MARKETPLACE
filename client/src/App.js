@@ -15,6 +15,7 @@ import Collection from './pages/Collection'
 import Nft from './pages/Nft'
 import Error from './pages/Error'
 import {ethers} from 'ethers'
+// import Web3 from 'web3'
 import {web3Provider} from './context/web3'
 
 function App() {
@@ -62,7 +63,10 @@ function App() {
     setNftMarkContract(tempNFTmarketContract)
     setNftContracr(tempNFTContract)
 
+
     console.log(provider);
+    console.log(nftContract);
+    console.log(nftMarketContract);
    }
   // useEffect(() => {
     
@@ -91,7 +95,7 @@ function App() {
           <Route path="/explore" element={<Explore/>}>
         
           </Route>
-          <Route path="/mint" element={<Create/>}>
+          <Route path="/create" element={<Create/>}>
          
           </Route>
           <Route path="/mycollection" element={<Collection/>}>

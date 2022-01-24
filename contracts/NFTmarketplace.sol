@@ -15,8 +15,8 @@ contract NFTmarketplace is ReentrancyGuard {
     Counters.Counter private _itemIds;
     Counters.Counter private _itemSold;
 
-    address payable owner;
-    uint listingPrice = 0.05 ether;
+    address payable public owner;
+    uint listingPrice = 0.025 ether;
 
     constructor(){
     owner = payable(msg.sender) ;
@@ -32,7 +32,7 @@ contract NFTmarketplace is ReentrancyGuard {
         bool sold;
     }
      
-    mapping (uint => MarketItem) private idMarketItem;
+    mapping (uint => MarketItem) public idMarketItem;
 
     event MarketItemCreated(
         uint indexed itemId,
@@ -42,7 +42,7 @@ contract NFTmarketplace is ReentrancyGuard {
         address owner,
         uint price,
         bool sold
-    ); 
+    );
 
     function getListingPrice() public view returns(uint){
         return listingPrice;
@@ -93,6 +93,9 @@ contract NFTmarketplace is ReentrancyGuard {
 
     }
       // jj
+      // function getItems(uint ids) public view returns(MarketItem[] memory) {
+      //   return idMarketItem[ids] ;
+      // }
      function fetchMarketItems() public view returns (MarketItem[] memory) {
     uint itemCount = _itemIds.current();
     uint unsoldItemCount = _itemIds.current() - _itemSold.current();
@@ -110,7 +113,7 @@ contract NFTmarketplace is ReentrancyGuard {
     return items;
   }
 
-  /* Returns only items that a user has purchased */
+
   function fetchMyNFTs() public view returns (MarketItem[] memory) {
     uint totalItemCount = _itemIds.current();
     uint itemCount = 0;
