@@ -101,9 +101,10 @@ function App() {
           <Route path="/mycollection" element={<Collection/>}>
          
          </Route>
+
          <Route path="/view" element={<Nft/>}>
-         
          </Route>
+         
          <Route path="*" element={<Error/>}/>
         </Routes>
         </web3Provider.Provider>

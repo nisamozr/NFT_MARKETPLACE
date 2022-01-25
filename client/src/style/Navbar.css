@@ -114,6 +114,7 @@ a{
 }
 .btn2{
     height: 40px;
+    /* width: 200px; */
 
     align-items: center;
     display: flex;

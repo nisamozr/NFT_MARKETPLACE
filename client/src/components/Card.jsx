@@ -2,18 +2,19 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import "../style/Card.css"
 
-function Card({data}) {
+function Card({price,image,tokenId,name}) {
+   
     return (
         <div className=" col-md-12 col-lg-4  ">
             
             <div className="card">
-            <Link to="/view"> 
+            <Link to="/view" > 
             <div className="card-innerbox">
-                <img src="/Asset/12.jpg" alt="" />
-                <h3>Cryto pung #425</h3>
+                <img src={image} alt="" />
+                <h3>{name} #{tokenId}</h3>
                 <div className="pro">
                     <div className="c">
-                    <p>{data} ETH</p>
+                    <p>{price} ETH</p>
                     </div>
                     
                     <button className="btn1 fg">Buy</button>

@@ -1,19 +1,17 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
-import {useRoutes} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import { ethers } from 'ethers'
 import {create as ipfsHttpClient} from "ipfs-http-client"
 import { web3Provider } from '../context/web3'
 import NFT from "../contracts/NFT.json"
 import Market from "../contracts/NFTmarketplace.json"
 
-
-
 import '../style/Create.css'
 
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0")
+const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
 function Create() {
-  // const router = useRoutes()
+  const route = useNavigate();
   const {connection, signer ,nftMarketplaceContract,nftContract} = useContext(web3Provider)
   const fileRef = useRef(null)
   const [image, setImage] = useState()
@@ -38,14 +36,10 @@ function Create() {
 
       const filed = e.target.files[0]
     try {
-      const added = await client.add(
-        filed
-        // {
-        //   progress: (prog) => console.log(`received: ${prog}`)
-        // }
+      const added = await client.add(filed
       )
-      console.log(added);
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`
+      // console.log(added)
+      const url = `https://ipfs.io/ipfs/${added.path}`
       setFileUrl(url)
     } catch (error) {
       console.log('Error uploading file: ', error)
@@ -64,9 +58,9 @@ const createMarketitem = async ()=>{
     })
   
     try {
-      // const added = await client.add(data)
-      const url = fileUrl
-      console.log("yrr",url)
+      const added = await client.add(data)
+      const url = `https://ipfs.io/ipfs/${added.path}`
+   
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url)
     } catch (error) {
@@ -97,7 +91,7 @@ async function createSale(url) {
 
   transaction = await contract.createMarketplace(nftContract.address, tokenId, price, { value: listingPrice })
   await transaction.wait()
-  // router.push('/')
+  route('/explore')
 }
 
   return (
