@@ -47,6 +47,11 @@ contract NFTmarketplace is ReentrancyGuard {
     function getListingPrice() public view returns(uint){
         return listingPrice;
     }
+     function marketItemCont() public view returns(uint){
+       uint newItemId = _itemIds.current();
+        return newItemId;
+    }
+
 
     function createMarketplace(address nftContract, uint tokenId, uint price) public payable nonReentrant {
         require(price > 0 , "price must be graterthan zero");
@@ -79,23 +84,45 @@ contract NFTmarketplace is ReentrancyGuard {
         );
     }
 
+      function sellMarketplace(address nftContract, uint Id, uint price) public payable nonReentrant {
+        require(price > 0 , "price must be graterthan zero");
+        require(msg.value == listingPrice, "value must equal to listing price");
+        uint tokenId = idMarketItem[Id].tokenId;
+        idMarketItem[Id].price = price;
+        idMarketItem[Id].sold = false;
+        // idMarketItem[Id].seller = msg.sender;
+
+      
+        IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
+
+        emit MarketItemCreated(
+            Id,
+            nftContract,
+            tokenId,
+            payable(msg.sender),
+            payable(address(0)),
+            price,
+            false
+
+        );
+    }
+
     function creatMarketSales(address nftContract, uint ItemId) public payable nonReentrant{
         uint price = idMarketItem[ItemId].price;
         uint tokenId = idMarketItem[ItemId].tokenId;
         require(msg.value == price, "to complit this transaction you should have asking price");
+        require(msg.sender != idMarketItem[ItemId].owner, "owner cannot buy");
         
         idMarketItem[ItemId].seller.transfer(msg.value);
         IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId) ;
         idMarketItem[ItemId].owner = payable(msg.sender);
         idMarketItem[ItemId].sold = true;
+          _itemSold.increment();
         payable(owner).transfer(listingPrice);
         
 
     }
-      // jj
-      // function getItems(uint ids) public view returns(MarketItem[] memory) {
-      //   return idMarketItem[ids] ;
-      // }
+
      function fetchMarketItems() public view returns (MarketItem[] memory) {
     uint itemCount = _itemIds.current();
     uint unsoldItemCount = _itemIds.current() - _itemSold.current();
@@ -103,7 +130,7 @@ contract NFTmarketplace is ReentrancyGuard {
 
     MarketItem[] memory items = new MarketItem[](unsoldItemCount);
     for (uint i = 0; i < itemCount; i++) {
-      if (idMarketItem[i + 1].owner == address(0)) {
+      if (idMarketItem[i + 1].sold == false) {
         uint currentId = i + 1;
         MarketItem storage currentItem = idMarketItem[currentId];
         items[currentIndex] = currentItem;
@@ -163,3 +190,5 @@ contract NFTmarketplace is ReentrancyGuard {
 
 
 }
+
+

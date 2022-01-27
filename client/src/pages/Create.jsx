@@ -73,7 +73,7 @@ async function createSale(url) {
   // const connection = await web3Modal.connect()
   // const providers = connection   
   // const signers = signer
-
+console.log("vfdb");
   /* next, create the item */
   let contract = nftContract
   let transaction = await contract.createToken(url)

@@ -102,7 +102,7 @@ function App() {
          
          </Route>
 
-         <Route path="/view" element={<Nft/>}>
+         <Route path="/view/:id" element={<Nft/>}>
          </Route>
          
          <Route path="*" element={<Error/>}/>
