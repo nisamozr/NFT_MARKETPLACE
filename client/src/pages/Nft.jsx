@@ -1,103 +1,141 @@
 import React, { useState, useEffect, useContext } from 'react'
 import "../style/nft.css"
-import {useParams} from "react-router-dom"
-import {web3Provider} from "../context/web3"
+import { useParams } from "react-router-dom"
+import { web3Provider } from "../context/web3"
 import axios from "axios"
-import {ethers} from "ethers"
-import {useNavigate} from "react-router-dom"
-import {nftaddress } from '../config'
+import { ethers } from "ethers"
+import { useNavigate } from "react-router-dom"
+import { nftaddress } from '../config'
 
 function Nft() {
   const route = useNavigate();
-    const {
-      
-        nftMarketplaceContract,
-        nftContract,
-      } = useContext(web3Provider)
-    let {id}= useParams()
-    const [nft, setNft] = useState({})
-    useEffect(() => {
-        loadNFT()
-      },[])
+  const {
+    nftMarketplaceContract,
+    nftContract,
+  } = useContext(web3Provider)
+  let { id, view } = useParams()
+  const [nft, setNft] = useState({})
+  useEffect(() => {
+    loadNFT()
+  })
 
-      async function loadNFT(){
-        const data = await nftMarketplaceContract.fetchMarketItems()
-       await Promise.all(
-          data.map(async (i) => {
-            let tockenid = i.tokenId
-            // console.log(tockenid.toString(), id)
-              if(tockenid.toString() === id){
-                
-                let id = tockenid.toNumber()
-                const tokenUri = await nftContract.tokenURI(id)
-                const meta = await axios.get(tokenUri)
-                let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-                let item = {
-                    itemId: i.itemId.toNumber(),
-                  price,
-                  priceInbign:i.price,
-                  tokenId: i.tokenId.toNumber(),
-                  seller: i.seller,
-                  owner: i.owner,
-                  image: meta.data.image,
-                  name: meta.data.name,
-                  description: meta.data.description,
-                }
-                setNft(item)
-                return item
-                
-              }
-           
-          }),
-        )
-        
+  async function loadNFT() {
+    if (view === "buy") {
+      const data = await nftMarketplaceContract.fetchMarketItems()
+      await Promise.all(
+        data.map(async (i) => {
+          let tockenid = i.tokenId
+          if (tockenid.toString() === id) {
+            let id = tockenid.toNumber()
+            const tokenUri = await nftContract.tokenURI(id)
+            const meta = await axios.get(tokenUri)
+            let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+            let item = {
+              itemId: i.itemId.toNumber(),
+              price,
+              priceInbign: i.price,
+              tokenId: i.tokenId.toNumber(),
+              seller: i.seller,
+              owner: i.owner,
+              image: meta.data.image,
+              name: meta.data.name,
+              description: meta.data.description,
+            }
+            setNft(item)
+            return item
+          }
+        }),
+      )
+    }
+    else if (view === "my") {
+      const data = await nftMarketplaceContract.fetchMyNFTs()
+      await Promise.all(
+        data.map(async (i) => {
+          let tockenid = i.tokenId
+          if (tockenid.toString() === id) {
+            let id = tockenid.toNumber()
+            const tokenUri = await nftContract.tokenURI(id)
+            const meta = await axios.get(tokenUri)
+            let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+            let item = {
+              itemId: i.itemId.toNumber(),
+              price,
+              priceInbign: i.price,
+              tokenId: i.tokenId.toNumber(),
+              seller: i.seller,
+              owner: i.owner,
+              image: meta.data.image,
+              name: meta.data.name,
+              description: meta.data.description,
+            }
+            setNft(item)
+            return item
+          }
+        }),
+      )
+    }
+  }
 
-      }
+  const buyNFT = async () => {
+    const buy = await nftMarketplaceContract.creatMarketSales(nftaddress, nft.itemId, { value: nft.priceInbign })
+    await buy.wait()
+    route('/explore')
+  }
+  const [prices, setPrice] = useState(null);
+  const [sellPrice, setSells] = useState(null)
 
-      const buyNFT = async ()=>{
+  const sellk = () => {
+    setSells({ price: nft.price, id: nft.itemId })
+    sell()
 
-           const buy = await nftMarketplaceContract.creatMarketSales(nftaddress,nft.itemId,{ value: nft.priceInbign })
-           await buy.wait()
-           route('/explore')
-      } 
-   
-    return (
-        <div className="new">
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-7">
-                        <div className="nftbox">
-                        <img src={nft.image} alt="" />
+  }
 
-                        </div>
-                       
+  const sell = async () => {
+    let listingPrice = await nftMarketplaceContract.getListingPrice()
+    listingPrice = listingPrice.toString()
+    const price = ethers.utils.parseUnits(sellPrice.price, 'ether')
+    const l = sellPrice.id
+    console.log("ffffffffff", l, "ygyg", price)
+    const buy = await nftMarketplaceContract.sellMarketplace(nftaddress, sellPrice.id, price, { value: listingPrice })
+    await buy.wait()
+    route('/explore')
+  }
 
-                    </div>
-                    <div className="col-md-5">
-                        <div className="nftDes">
-                        
-                            <div className="cont">
-                            <h2>{nft.name} {id}</h2>
-                            <p>{nft.description}</p>
-                            
-                            </div>
-                            <div className="owner">
-                                <h4>Owned by</h4>
-                                <p>{nft.owner}</p>
-                            </div>
-                            <div className="buy">
-                               <h4>{nft.price}ETH</h4>
-                               <button className="btn2 connect" onClick={buyNFT}>Buy Now</button>
-                            </div>
-                            
-                        </div>
-
-                    </div>
-                </div>
+  return (
+    <div className="new">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-7">
+            <div className="nftbox">
+              <img src={nft.image} alt="" />
             </div>
-            
+          </div>
+          <div className="col-md-5">
+            <div className="nftDes">
+              <div className="cont">
+                <h2>{nft.name} {id}</h2>
+                <p>{nft.description}</p>
+              </div>
+              <div className="owner">
+                <h4>Owned by</h4>
+                <p className='ownerAdd'>{nft.owner}</p>
+              </div>
+              {
+                (view == "buy") ? <div className="buy">
+                  {/* <img src="./etg.png" alt="" /> */}
+                  <h4>{nft.price}ETH</h4>
+                  <button className="btn2 connect" onClick={buyNFT}>Buy Now</button>
+                </div> : <div className="buy">
+                  <input type="number" className="sell" onChange={e => setPrice(e.target.value)} name="" id="" />
+                  <button className="btn2 connect" onClick={sellk}>Sell Now</button>
+                </div>
+              }
+            </div>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default Nft

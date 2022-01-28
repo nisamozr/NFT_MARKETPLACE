@@ -47,7 +47,7 @@
     height: 95%;
     width: 95%;
     border-radius: 15px;
-    transition: 0.3s;
+    transition: 0.5s ease-in-out;
   
 }
 .blankPhoto img:hover{
@@ -67,4 +67,7 @@
 }
 .but{
     display: flex;
+}
+.connectWalletWarring{
+    
 }

@@ -1,13 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-
-// import Navbar from '../components/Navbar'
 import '../style/Home.css'
 
 
 function Home() {
-
-  
 
   return (
     <div className="container">
@@ -26,7 +22,7 @@ function Home() {
           <dic className="col-md-6">
             <div className="feeld-right">
               <div className="f">
-                <div className="dis">The Pretty Fantasy World of Mine</div>
+                <div className="dis">Mint your own NFT's on one click </div>
                 <div className="but">
                   <Link to="/create">
                     {' '}

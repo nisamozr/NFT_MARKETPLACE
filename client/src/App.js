@@ -15,7 +15,6 @@ import Collection from './pages/Collection'
 import Nft from './pages/Nft'
 import Error from './pages/Error'
 import {ethers} from 'ethers'
-// import Web3 from 'web3'
 import {web3Provider} from './context/web3'
 
 function App() {
@@ -29,8 +28,7 @@ function App() {
     const [nftContract, setNftContracr] = useState(null)
     const [nftMarketContract, setNftMarkContract] = useState(null)
     
-    
-
+ 
   const walletConnectionHandel = ()=>{
     
     if(window.ethereum && window.ethereum.isMetaMask){
@@ -49,9 +47,18 @@ function App() {
   const accountChangeHandler = (newAccount)=>{
     setdefaltAccount(newAccount)
     console.log(defaltAccount);
+    getBalance(newAccount.toString())
     updateEteres()
 
   }
+  const getBalance = (address)=>{
+    window.ethereum.request({method: 'eth_getBalance', params: [address, 'latest']}).then((balance)=>{
+      setBalance(ethers.utils.formatEther(balance))
+    })
+  
+
+  }
+  
   const updateEteres = ()=>{
     let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
     let tempSigner = tempProvider.getSigner()
@@ -68,16 +75,7 @@ function App() {
     console.log(nftContract);
     console.log(nftMarketContract);
    }
-  // useEffect(() => {
-    
-    
-   
-  
  
-  
-   
-   
-  // },[]);
   
  
 
@@ -85,8 +83,8 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <web3Provider.Provider value={{connection: provider,signer:signer, nftContract:nftContract, nftMarketplaceContract:nftMarketContract}}>
+      <div className="App" >
+        <web3Provider.Provider value={{connection: provider,signer:signer,Balance: Balance, nftContract:nftContract, nftMarketplaceContract:nftMarketContract}}>
         <Navbar connet = {walletConnectionHandel} account={defaltAccount} />
         <Routes>
           <Route exact path="/" element={<Home/>}>
@@ -102,7 +100,7 @@ function App() {
          
          </Route>
 
-         <Route path="/view/:id" element={<Nft/>}>
+         <Route path="/view/:view/:id" element={<Nft/>}>
          </Route>
          
          <Route path="*" element={<Error/>}/>

@@ -47,11 +47,10 @@ contract NFTmarketplace is ReentrancyGuard {
     function getListingPrice() public view returns(uint){
         return listingPrice;
     }
-     function marketItemCont() public view returns(uint){
+    function marketItemCont() public view returns(uint){
        uint newItemId = _itemIds.current();
         return newItemId;
     }
-
 
     function createMarketplace(address nftContract, uint tokenId, uint price) public payable nonReentrant {
         require(price > 0 , "price must be graterthan zero");
@@ -80,7 +79,6 @@ contract NFTmarketplace is ReentrancyGuard {
             payable(address(0)),
             price,
             false
-
         );
     }
 
@@ -123,71 +121,48 @@ contract NFTmarketplace is ReentrancyGuard {
 
     }
 
-     function fetchMarketItems() public view returns (MarketItem[] memory) {
-    uint itemCount = _itemIds.current();
-    uint unsoldItemCount = _itemIds.current() - _itemSold.current();
-    uint currentIndex = 0;
+    function fetchMarketItems() public view returns (MarketItem[] memory) {
+      uint itemCount = _itemIds.current();
+      uint unsoldItemCount = _itemIds.current() - _itemSold.current();
+      uint currentIndex = 0;
 
-    MarketItem[] memory items = new MarketItem[](unsoldItemCount);
-    for (uint i = 0; i < itemCount; i++) {
-      if (idMarketItem[i + 1].sold == false) {
-        uint currentId = i + 1;
-        MarketItem storage currentItem = idMarketItem[currentId];
-        items[currentIndex] = currentItem;
-        currentIndex += 1;
+      MarketItem[] memory items = new MarketItem[](unsoldItemCount);
+      for (uint i = 0; i < itemCount; i++) {
+        if (idMarketItem[i + 1].sold == false) {
+          uint currentId = i + 1;
+          MarketItem storage currentItem = idMarketItem[currentId];
+          items[currentIndex] = currentItem;
+          currentIndex += 1;
+        }
       }
-    }
-    return items;
-  }
-
-
-  function fetchMyNFTs() public view returns (MarketItem[] memory) {
-    uint totalItemCount = _itemIds.current();
-    uint itemCount = 0;
-    uint currentIndex = 0;
-
-    for (uint i = 0; i < totalItemCount; i++) {
-      if (idMarketItem[i + 1].owner == msg.sender) {
-        itemCount += 1;
-      }
+      return items;
     }
 
-    MarketItem[] memory items = new MarketItem[](itemCount);
-    for (uint i = 0; i < totalItemCount; i++) {
-      if (idMarketItem[i + 1].owner == msg.sender) {
-        uint currentId = i + 1;
-        MarketItem storage currentItem = idMarketItem[currentId];
-        items[currentIndex] = currentItem;
-        currentIndex += 1;
+
+    function fetchMyNFTs() public view returns (MarketItem[] memory) {
+      uint totalItemCount = _itemIds.current();
+      uint itemCount = 0;
+      uint currentIndex = 0;
+
+      for (uint i = 0; i < totalItemCount; i++) {
+        if (idMarketItem[i + 1].owner == msg.sender) {
+          itemCount += 1;
+        }
       }
-    }
-    return items;
-  }
 
-  /* Returns only items a user has created */
-  function fetchItemsCreated() public view returns (MarketItem[] memory) {
-    uint totalItemCount = _itemIds.current();
-    uint itemCount = 0;
-    uint currentIndex = 0;
-
-    for (uint i = 0; i < totalItemCount; i++) {
-      if (idMarketItem[i + 1].seller == msg.sender) {
-        itemCount += 1;
+      MarketItem[] memory items = new MarketItem[](itemCount);
+      for (uint i = 0; i < totalItemCount; i++) {
+        if (idMarketItem[i + 1].owner == msg.sender) {
+          uint currentId = i + 1;
+          MarketItem storage currentItem = idMarketItem[currentId];
+          items[currentIndex] = currentItem;
+          currentIndex += 1;
+        }
       }
+      return items;
     }
 
-    MarketItem[] memory items = new MarketItem[](itemCount);
-    for (uint i = 0; i < totalItemCount; i++) {
-      if (idMarketItem[i + 1].seller == msg.sender) {
-        uint currentId = i + 1;
-        MarketItem storage currentItem = idMarketItem[currentId];
-        items[currentIndex] = currentItem;
-        currentIndex += 1;
-      }
-    }
-    return items;
-  }
-
+  
 
 }
 

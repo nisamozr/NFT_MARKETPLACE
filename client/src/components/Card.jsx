@@ -7,16 +7,17 @@ function Card({price,image,tokenId,name}) {
     return (
         <div className=" col-md-12 col-lg-4">
             <div className="card">
-            <Link to={`/view/${tokenId}` }> 
+            <Link to={`/view/buy/${tokenId}` }> 
             <div className="card-innerbox">
                 <img src={image} alt="" />
                 <h3>{name} #{tokenId}</h3>
                 <div className="pro">
                     <div className="c">
-                    <p>{price} ETH</p>
+                        <img src="./etg.png" alt="" />
+                        <p>{price} ETH</p>
                     </div>
                     
-                    <button className="btn1 fg">Buy</button>
+                    {/* <button className="btn1 fg">Buy</button> */}
                 </div>
             </div>
             </Link>

@@ -20,7 +20,8 @@ function Collection() {
     
       useEffect(() => {
         loadNFT()
-      }, [nfts])
+       
+      }, [])
     
       async function loadNFT() {
         const data = await nftMarketplaceContract.fetchMyNFTs()
@@ -45,43 +46,32 @@ function Collection() {
           }),
         )
         setNfts(items)
-        // setLoding('loaded')
+       
       }
 
-      const sells =async ()=>{
-         
-         
-        let listingPrice = await nftMarketplaceContract.getListingPrice()
-        listingPrice = listingPrice.toString() 
- 
-        const price = ethers.utils.parseUnits(sellPrice.price, 'ether')
-    const l = sellPrice.id
-
-        console.log("ffffffffff",  l,"ygyg", price)
-        const buy = await nftMarketplaceContract.sellMarketplace(nftaddress,sellPrice.id,price, { value: listingPrice })
-        await buy.wait()
-        route('/explore')
-      }
+     
     return (
         <div className="news">
              <div className="collotion">
                 <div className="container">
                     <h3>My NFT Collection</h3>
                 <div className="row">
+{
+  (connection == null)? <div className='connectWalletWarring'>Please connect with wallet</div> : (nfts.length == 0)? <div className='connectWalletWarring'>You not owned any NFT's</div>    :nfts.map((nfts, i) => (
+    <Card
+      key={i}
+      price={nfts.price}
+      name={nfts.name}
+      tokenId={nfts.tokenId}
+      image={nfts.image}
+      // sell = {sells}
+      // setSells = {setSells}
+      marketId = {nfts.marketId}
 
-                    {nfts.map((nfts, i) => (
-              <Card
-                key={i}
-                price={nfts.price}
-                name={nfts.name}
-                tokenId={nfts.tokenId}
-                image={nfts.image}
-                sell = {sells}
-                setSells = {setSells}
-                marketId = {nfts.marketId}
-
-              />
-            ))}
+    />
+  ))
+}
+                  
                     
                  
                     

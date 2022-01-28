@@ -1,4 +1,5 @@
 .nftbox{
+   
     width: 100%;
     /* background-color: #F2F2F2;  */
     padding: 50px;
@@ -9,7 +10,9 @@
 }
 
 .nftbox img{
+    
     width: 100%;
+    height: 350px;
     border-radius: 15px;
     box-shadow: 0px 20px 50px rgb(1 1 0 / 19%);     
 
@@ -31,7 +34,7 @@
 
 }
 .cont h2{
-    font-size: 40px;
+    font-size: 35px;
     font-weight: bolder;
     color: black;
 }
@@ -54,3 +57,17 @@
     border: 1px solid #999;
 
 }
+
+.ownerAdd{
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  	max-width:100%;
+}
+@media only screen and (max-width: 762px) {
+   
+    .nftbox{
+        padding: 0 ;
+    }
+  }
