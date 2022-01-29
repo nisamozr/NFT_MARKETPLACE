@@ -67,7 +67,6 @@ contract NFTmarketplace is ReentrancyGuard {
             payable(address(0)),
             price,
             false
-
         );
         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
 
@@ -88,28 +87,27 @@ contract NFTmarketplace is ReentrancyGuard {
         uint tokenId = idMarketItem[Id].tokenId;
         idMarketItem[Id].price = price;
         idMarketItem[Id].sold = false;
-        // idMarketItem[Id].seller = msg.sender;
+        // idMarketItem[Id].seller = payable(msg.sender);
 
-      
         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
-
         emit MarketItemCreated(
             Id,
             nftContract,
             tokenId,
             payable(msg.sender),
-            payable(address(0)),
+            payable(msg.sender),
             price,
             false
-
         );
+        _itemSold.decrement();
     }
 
     function creatMarketSales(address nftContract, uint ItemId) public payable nonReentrant{
         uint price = idMarketItem[ItemId].price;
         uint tokenId = idMarketItem[ItemId].tokenId;
-        require(msg.value == price, "to complit this transaction you should have asking price");
-        require(msg.sender != idMarketItem[ItemId].owner, "owner cannot buy");
+        require(msg.value >= price, "to complit this transaction you should have asking price");
+        require(msg.sender != idMarketItem[ItemId].owner, "you are the owner of this nft");
+
         
         idMarketItem[ItemId].seller.transfer(msg.value);
         IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId) ;

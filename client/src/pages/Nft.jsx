@@ -15,6 +15,7 @@ function Nft() {
   } = useContext(web3Provider)
   let { id, view } = useParams()
   const [nft, setNft] = useState({})
+
   useEffect(() => {
     loadNFT()
   })
@@ -93,9 +94,7 @@ function Nft() {
   const sell = async () => {
     let listingPrice = await nftMarketplaceContract.getListingPrice()
     listingPrice = listingPrice.toString()
-    const price = ethers.utils.parseUnits(sellPrice.price, 'ether')
-    const l = sellPrice.id
-    console.log("ffffffffff", l, "ygyg", price)
+    const price = ethers.utils.parseUnits(prices, 'ether')
     const buy = await nftMarketplaceContract.sellMarketplace(nftaddress, sellPrice.id, price, { value: listingPrice })
     await buy.wait()
     route('/explore')
@@ -113,12 +112,12 @@ function Nft() {
           <div className="col-md-5">
             <div className="nftDes">
               <div className="cont">
-                <h2>{nft.name} {id}</h2>
+                <h2>{nft.name} # {id}</h2>
                 <p>{nft.description}</p>
               </div>
               <div className="owner">
                 <h4>Owned by</h4>
-                <p className='ownerAdd'>{nft.owner}</p>
+                <p className='ownerAdd'> { nft.owner}</p>
               </div>
               {
                 (view == "buy") ? <div className="buy">

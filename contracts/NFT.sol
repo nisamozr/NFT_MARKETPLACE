@@ -15,7 +15,7 @@ contract NFT is ERC721URIStorage {
     Counters.Counter private _tokenIds;
     address contractAddress;
 
-    constructor( address marketplaceAddress) ERC721("Mixter","MIX"){
+    constructor( address marketplaceAddress) ERC721("All Time NFT","NFT"){
         contractAddress = marketplaceAddress;
     }
 

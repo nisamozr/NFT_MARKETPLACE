@@ -30,10 +30,12 @@ function App() {
     
  
   const walletConnectionHandel = ()=>{
+   
     
     if(window.ethereum && window.ethereum.isMetaMask){
       window.ethereum.request({method: 'eth_requestAccounts'}).then((result)=>{
         accountChangeHandler(result[0])
+        console.log("hghgg")
 
       }).catch(error => {
         setErrorMessage(error.message)
