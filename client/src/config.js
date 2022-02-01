@@ -1,5 +1,5 @@
-export const nftaddress = "0xf9536B9c3815a042978Aee431c5ae224D1Ab7f05"
-export const nftmarketplaceAddress = "0x3CF9dEBABFD462DB453E3CbD0cA320e7CDCF101A"
+export const nftaddress = "0x9786240C67f924c131BFdA8fCd1Ac64C5a10E285"
+export const nftmarketplaceAddress = "0x2E09b614190526Dc4937eeD21CD658b530201469"
 // ipfs
 export const projectId = '23wyJeXukwYe3QUU6ybnJJ6UWSB'
 export const projectSecret = '5f991ef1f6e0032bb190eb14599409f8'

@@ -88,12 +88,14 @@ function Nft() {
   const [sellPrice, setSells] = useState(null)
 
   const setSellerAndsell = () => {
+    console.log(nft)
     setSells({ price: nft.price, id: nft.itemId })
     sell()
 
   }
 
   const sell = async () => {
+    await nftContract.approv()
     let listingPrice = await nftMarketplaceContract.getListingPrice()
     listingPrice = listingPrice.toString()
     const price = ethers.utils.parseUnits(prices, 'ether')
