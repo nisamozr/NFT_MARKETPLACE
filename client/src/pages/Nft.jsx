@@ -80,12 +80,14 @@ function Nft() {
   const buyNFT = async () => {
     const buy = await nftMarketplaceContract.creatMarketSales(nftaddress, nft.itemId, { value: nft.priceInbign })
     await buy.wait()
+    // const app = await nftMarketplaceContract.approv(nftaddress)
+    // await app.wait()
     route('/explore')
   }
   const [prices, setPrice] = useState(null);
   const [sellPrice, setSells] = useState(null)
 
-  const sellk = () => {
+  const setSellerAndsell = () => {
     setSells({ price: nft.price, id: nft.itemId })
     sell()
 
@@ -126,7 +128,7 @@ function Nft() {
                   <button className="btn2 connect" onClick={buyNFT}>Buy Now</button>
                 </div> : <div className="buy">
                   <input type="number" className="sell" onChange={e => setPrice(e.target.value)} name="" id="" />
-                  <button className="btn2 connect" onClick={sellk}>Sell Now</button>
+                  <button className="btn2 connect" onClick={setSellerAndsell}>Sell Now</button>
                 </div>
               }
             </div>

@@ -1,14 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol";
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Counters.sol";
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/ReentrancyGuard.sol";
-
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-
 
 contract NFTmarketplace is ReentrancyGuard {
     using Counters for Counters.Counter;
@@ -83,41 +78,44 @@ contract NFTmarketplace is ReentrancyGuard {
 
       function sellMarketplace(address nftContract, uint Id, uint price) public payable nonReentrant {
         require(price > 0 , "price must be graterthan zero");
-        require(msg.value == listingPrice, "value must equal to listing price");
+        require(msg.value >= listingPrice, "value must equal to listing price");
         uint tokenId = idMarketItem[Id].tokenId;
         idMarketItem[Id].price = price;
         idMarketItem[Id].sold = false;
-        // idMarketItem[Id].seller = payable(msg.sender);
+        idMarketItem[Id].owner = payable(address(this));
+        idMarketItem[Id].seller = payable(msg.sender);
 
         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
         emit MarketItemCreated(
             Id,
             nftContract,
             tokenId,
-            payable(msg.sender),
+            payable(address(this)),
             payable(msg.sender),
             price,
             false
         );
         _itemSold.decrement();
+        //  approv(nftContract);
     }
 
     function creatMarketSales(address nftContract, uint ItemId) public payable nonReentrant{
         uint price = idMarketItem[ItemId].price;
         uint tokenId = idMarketItem[ItemId].tokenId;
         require(msg.value >= price, "to complit this transaction you should have asking price");
-        require(msg.sender != idMarketItem[ItemId].owner, "you are the owner of this nft");
 
         
         idMarketItem[ItemId].seller.transfer(msg.value);
-        IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId) ;
+       
+        IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
         idMarketItem[ItemId].owner = payable(msg.sender);
         idMarketItem[ItemId].sold = true;
-          _itemSold.increment();
+        _itemSold.increment();
         payable(owner).transfer(listingPrice);
-        
 
     }
+
+   
 
     function fetchMarketItems() public view returns (MarketItem[] memory) {
       uint itemCount = _itemIds.current();

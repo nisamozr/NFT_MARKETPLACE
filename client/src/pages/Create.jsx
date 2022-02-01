@@ -3,12 +3,22 @@ import {useNavigate} from "react-router-dom"
 import { ethers } from 'ethers'
 import {create as ipfsHttpClient} from "ipfs-http-client"
 import { web3Provider } from '../context/web3'
-import NFT from "../contracts/NFT.json"
-import Market from "../contracts/NFTmarketplace.json"
-
+import {Buffer} from 'buffer';
 import '../style/Create.css'
+import {projectId, projectSecret} from "../config"
 
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
+const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
+
+const client = ipfsHttpClient(
+  {
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+      authorization: auth
+    }
+  }
+  )
 
 function Create() {
   const route = useNavigate();
@@ -16,7 +26,6 @@ function Create() {
   const fileRef = useRef(null)
   const [image, setImage] = useState()
   const [selecfile, setselecfile] = useState(null)
-  // uploding
   const [fileUrl, setFileUrl] = useState(null)
   const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' })
 
@@ -38,13 +47,12 @@ function Create() {
     try {
       const added = await client.add(filed
       )
-      // console.log(added)
+      console.log(added)
       const url = `https://ipfs.io/ipfs/${added.path}`
       setFileUrl(url)
     } catch (error) {
       console.log('Error uploading file: ', error)
     }  
-
     }
   }
 
@@ -52,16 +60,15 @@ const createMarketitem = async ()=>{
   const { name, description, price } = formInput
 
     if (!name || !description || !price || !fileUrl) return
-    /* first, upload to IPFS */
+
     const data = JSON.stringify({
       name, description, image: fileUrl
     })
   
     try {
       const added = await client.add(data)
+      console.log(added)
       const url = `https://ipfs.io/ipfs/${added.path}`
-   
-      /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url)
     } catch (error) {
       console.log('Error uploading file: ', error)
@@ -69,22 +76,13 @@ const createMarketitem = async ()=>{
 }
 
 async function createSale(url) {
-  // const web3Modal = new Web3Modal()
-  // const connection = await web3Modal.connect()
-  // const providers = connection   
-  // const signers = signer
-console.log("vfdb");
-  /* next, create the item */
   let contract = nftContract
   let transaction = await contract.createToken(url)
   let tx = await transaction.wait()
-  // console.log(tx);
   let event = tx.events[0]
   let value = event.args[2]
   let tokenId = value.toNumber()
   const price = ethers.utils.parseUnits(formInput.price, 'ether')
-
-  /* then list the item for sale on the marketplace */
   contract = nftMarketplaceContract;
   let listingPrice = await contract.getListingPrice()
   listingPrice = listingPrice.toString()
