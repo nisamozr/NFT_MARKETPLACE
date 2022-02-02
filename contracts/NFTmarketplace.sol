@@ -8,10 +8,12 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract NFTmarketplace is ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
+    Counters.Counter private _auctionId;
     Counters.Counter private _itemSold;
 
     address payable public owner;
     uint listingPrice = 0.025 ether;
+    uint256 public duration = 1 days;
 
     constructor(){
     owner = payable(msg.sender) ;
@@ -26,7 +28,28 @@ contract NFTmarketplace is ReentrancyGuard {
         uint price;
         bool sold;
     }
-     
+
+     struct Bidder {
+        address payable addr;
+        uint256 amount;
+      
+    }
+
+    struct Auction {
+        uint256 tokenId;
+        address payable seller;
+        uint256 staringPrice;
+        uint256 duration;
+        bool finished;
+        uint256 amount;
+        uint256 highestPrice;
+        address highestBidder;
+        
+        Bidder[] bidders;
+    }
+
+    // Auction[] auctions;
+    mapping(uint256 => Auction) public auctions;
     mapping (uint => MarketItem) public idMarketItem;
 
     event MarketItemCreated(
@@ -38,6 +61,7 @@ contract NFTmarketplace is ReentrancyGuard {
         uint price,
         bool sold
     );
+    
 
     function getListingPrice() public view returns(uint){
         return listingPrice;
@@ -96,7 +120,6 @@ contract NFTmarketplace is ReentrancyGuard {
             false
         );
         _itemSold.decrement();
-        //  approv(nftContract);
     }
 
     function creatMarketSales(address nftContract, uint ItemId) public payable nonReentrant{
@@ -114,14 +137,60 @@ contract NFTmarketplace is ReentrancyGuard {
         payable(owner).transfer(listingPrice);
 
     }
+    // auction
+    function createAuction(
+      address nftContract,
+        uint256 _tokenId,
+        uint256 _staringPrice
+    ) public  {
+      
+        auctions[_tokenId].tokenId = _tokenId;
+        auctions[_tokenId].seller = payable(address(this));
+        auctions[_tokenId].duration = block.timestamp;
+        auctions[_tokenId].staringPrice =  _staringPrice;
+         auctions[_tokenId].finished = false;
+          IERC721(nftContract).transferFrom(msg.sender, address(this), _tokenId);
+        
 
-   
+      // emit AuctionCreated(_tokenId, _seller, _price);
+    }
+
+
+    function bid (uint256 _tokenId) public payable {
+        // require(auction.seller != address(0));
+        require(msg.value > auctions[_tokenId].staringPrice );
+        require(!auctions[_tokenId].finished);
+        auctions[_tokenId].amount += msg.value;
+        if(msg.value >= auctions[_tokenId].highestPrice){
+          auctions[_tokenId].highestPrice = msg.value;
+          auctions[_tokenId].highestBidder = msg.sender;
+        }
+        auctions[_tokenId].bidders.push(
+            Bidder(payable(msg.sender), msg.value)
+        );
+        // emit AuctionBidden(_tokenId, msg.sender, msg.value);
+    }
+
+    function finish(address nftContract, uint256 _tokenId) public {
+
+        for (uint256 i = 0; i < auctions[_tokenId].bidders.length - 1; i++) {
+          if( auctions[_tokenId].bidders[i].addr != auctions[_tokenId].highestBidder){
+
+              uint256 amount = auctions[_tokenId].bidders[i].amount;
+              auctions[_tokenId].bidders[i].addr.transfer(amount);
+          }
+        }
+        address bidder = auctions[_tokenId].highestBidder;
+ 
+        IERC721(nftContract).transferFrom(address(this), bidder, _tokenId);
+        auctions[_tokenId].finished = true;
+        // emit AuctionFinished(_tokenId, awarder.addr);
+    }
 
     function fetchMarketItems() public view returns (MarketItem[] memory) {
       uint itemCount = _itemIds.current();
       uint unsoldItemCount = _itemIds.current() - _itemSold.current();
       uint currentIndex = 0;
-
       MarketItem[] memory items = new MarketItem[](unsoldItemCount);
       for (uint i = 0; i < itemCount; i++) {
         if (idMarketItem[i + 1].sold == false) {
@@ -133,7 +202,6 @@ contract NFTmarketplace is ReentrancyGuard {
       }
       return items;
     }
-
 
     function fetchMyNFTs() public view returns (MarketItem[] memory) {
       uint totalItemCount = _itemIds.current();
@@ -157,9 +225,6 @@ contract NFTmarketplace is ReentrancyGuard {
       }
       return items;
     }
-
-  
-
 }
 
 
