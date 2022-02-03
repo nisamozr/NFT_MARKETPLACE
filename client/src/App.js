@@ -16,6 +16,7 @@ import Nft from './pages/Nft'
 import Error from './pages/Error'
 import {ethers} from 'ethers'
 import {web3Provider} from './context/web3'
+import Sell from './pages/Sell'
 
 function App() {
 
@@ -104,6 +105,8 @@ function App() {
 
          <Route path="/view/:view/:id" element={<Nft/>}>
          </Route>
+         <Route path="/sell/:id" element={<Sell></Sell>}/>
+        
          
          <Route path="*" element={<Error/>}/>
         </Routes>

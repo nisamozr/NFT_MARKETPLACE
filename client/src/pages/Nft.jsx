@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import "../style/nft.css"
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { web3Provider } from "../context/web3"
 import axios from "axios"
 import { ethers } from "ethers"
@@ -129,8 +129,9 @@ function Nft() {
                   <h4>{nft.price}ETH</h4>
                   <button className="btn2 connect" onClick={buyNFT}>Buy Now</button>
                 </div> : <div className="buy">
-                  <input type="number" className="sell" onChange={e => setPrice(e.target.value)} name="" id="" />
-                  <button className="btn2 connect" onClick={setSellerAndsell}>Sell Now</button>
+                  {/* <input type="number" className="sell" onChange={e => setPrice(e.target.value)} name="" id="" /> */}
+                 <Link to={`/sell/${id}`}> <button className="btn2 connect" >Sell Now</button> </Link>
+
                 </div>
               }
             </div>

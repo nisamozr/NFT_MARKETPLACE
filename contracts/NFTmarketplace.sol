@@ -27,12 +27,12 @@ contract NFTmarketplace is ReentrancyGuard {
         address payable owner;
         uint price;
         bool sold;
+        bool auction;
     }
 
      struct Bidder {
         address payable addr;
         uint256 amount;
-      
     }
 
     struct Auction {
@@ -43,8 +43,7 @@ contract NFTmarketplace is ReentrancyGuard {
         bool finished;
         uint256 amount;
         uint256 highestPrice;
-        address highestBidder;
-        
+        address highestBidder;        
         Bidder[] bidders;
     }
 
@@ -59,7 +58,8 @@ contract NFTmarketplace is ReentrancyGuard {
         address  seller,
         address owner,
         uint price,
-        bool sold
+        bool sold,
+        bool auction
     );
     
 
@@ -85,6 +85,7 @@ contract NFTmarketplace is ReentrancyGuard {
             payable(msg.sender),
             payable(address(0)),
             price,
+            false,
             false
         );
         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
@@ -96,6 +97,7 @@ contract NFTmarketplace is ReentrancyGuard {
             payable(msg.sender),
             payable(address(0)),
             price,
+            false,
             false
         );
     }
@@ -117,6 +119,7 @@ contract NFTmarketplace is ReentrancyGuard {
             payable(address(this)),
             payable(msg.sender),
             price,
+            false,
             false
         );
         _itemSold.decrement();
@@ -149,7 +152,22 @@ contract NFTmarketplace is ReentrancyGuard {
         auctions[_tokenId].duration = block.timestamp;
         auctions[_tokenId].staringPrice =  _staringPrice;
          auctions[_tokenId].finished = false;
+         _itemIds.increment();
+        uint newItemId = _itemIds.current();
+
+        idMarketItem[newItemId] = MarketItem(
+            newItemId,
+            nftContract,
+            _tokenId,
+            payable(msg.sender),
+            payable(address(0)),
+            _staringPrice,
+            false,
+            true
+        );
           IERC721(nftContract).transferFrom(msg.sender, address(this), _tokenId);
+
+           _itemSold.decrement();
         
 
       // emit AuctionCreated(_tokenId, _seller, _price);
