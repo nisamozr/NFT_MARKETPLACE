@@ -45,6 +45,7 @@ function Navbar({ connet, account }) {
                             <li> <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : 'link')} activeStyle={{ color: 'red' }}>Home</NavLink></li>
                             <li><NavLink to="/explore" className={({ isActive }) => (isActive ? 'active' : 'link')}>Explore </NavLink></li>
                             <li><NavLink to="/mycollection" className={({ isActive }) => (isActive ? 'active' : 'link')}>My Collection </NavLink></li>
+                           
 
                         </ul>
                         <Link to="/create" className="btn1">Create</Link>

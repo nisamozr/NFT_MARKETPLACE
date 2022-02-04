@@ -27,7 +27,7 @@ function Create() {
   const [image, setImage] = useState()
   const [selecfile, setselecfile] = useState(null)
   const [fileUrl, setFileUrl] = useState(null)
-  const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' })
+  const [formInput, updateFormInput] = useState({price: '', name: '', description: '' })
 
   const ButtonClic = () => {
     fileRef.current.click()
@@ -59,7 +59,7 @@ function Create() {
 const createMarketitem = async ()=>{
   const { name, description, price } = formInput
 
-    if (!name || !description || !price || !fileUrl) return
+    if (!name || !description || !price  || !fileUrl) return
 
     const data = JSON.stringify({
       name, description, image: fileUrl
@@ -87,7 +87,7 @@ async function createSale(url) {
   let listingPrice = await contract.getListingPrice()
   listingPrice = listingPrice.toString()
 
-  transaction = await contract.createMarketplace(nftContract.address, tokenId, price, { value: listingPrice })
+  transaction = await contract.createMarketplace(nftContract.address, tokenId,price ,{ value: listingPrice })
   await transaction.wait()
   route('/explore')
 }

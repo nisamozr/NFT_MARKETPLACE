@@ -25,36 +25,6 @@ function Explore() {
 
 
   async function loadNFT() {
-    // let count =  await nftMarketplaceContract.marketItemCont()
-    // console.log(count.toNumber(),"ggggggggggggggggggdddd")
-
-    //   for(let j=1; j<=count ; j++){
-    //     const i = await nftMarketplaceContract.idMarketItem(j)
-    //     console.log(i,"gggggggggggggggggg")
-    //      let tockenid = i.tokenId
-    //       let id = tockenid.toNumber()
-
-    //       const tokenUri = await nftContract.tokenURI(id)
-    //       const meta = await axios.get(tokenUri)
-    //       let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-
-    //       let item = {
-    //         price,
-    //         tokenId: i.tokenId.toNumber(),
-    //         seller: i.seller,
-    //         owner: i.owner,
-    //         image: meta.data.image,
-    //         name: meta.data.name,
-    //         description: meta.data.description,
-    //       }
-    //       // return item
-    //       setNfts(nfts.push(item))
-    //       console.log("jj")
-
-    //   console.log(nfts,"dd")
-
-
-    //  }
 
 
 

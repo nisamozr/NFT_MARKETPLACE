@@ -17305,12 +17305,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xCC1f8A16C4eC8F245e90F5E71843C57656bC40B1",
-      "transactionHash": "0x4b6f3cd914b4a6c3132cfdbd4c302bee2c3f2dd553b2b892ef07c8f20bf504d7"
+      "address": "0x938FC1ac3067685d57D005fCD74EAe44d1c9C3Ad",
+      "transactionHash": "0x90247f5b9afa3b1665a9c4d4efdc0d21d82ce015a260bb1aec57732c74afc2b8"
     }
   },
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-02-03T09:22:22.169Z",
+  "updatedAt": "2022-02-04T16:34:12.359Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

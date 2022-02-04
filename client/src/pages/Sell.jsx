@@ -14,7 +14,7 @@ function Sell() {
     nftMarketplaceContract,
     nftContract,
   } = useContext(web3Provider)
-  let { id } = useParams()
+  let { id, view } = useParams()
   const [nft, setNft] = useState({})
   const [fixedSell, setfixedSell] = useState(true)
   const [auctionSell, setActionSell] = useState()
@@ -25,7 +25,7 @@ function Sell() {
   })
 
   async function loadNFT() {
-
+  
     const data = await nftMarketplaceContract.fetchMyNFTs()
     await Promise.all(
       data.map(async (i) => {
@@ -51,7 +51,6 @@ function Sell() {
         }
       }),
     )
-
   }
 
 
@@ -80,9 +79,9 @@ function Sell() {
     let listingPrice = await nftMarketplaceContract.getListingPrice()
     listingPrice = listingPrice.toString()
     const price = ethers.utils.parseUnits(prices, 'ether')
-    const actions = await nftMarketplaceContract.createAuction(nftaddress, nft.tokenId, price)
+    const actions = await nftMarketplaceContract.createAuction(nftaddress, nft.itemId, price, {value: listingPrice})
     await actions.wait()
-    // route('/explore')
+    route('/explore')
   }
 
   return (

@@ -64,6 +64,7 @@ function Collection() {
                   tokenId={nfts.tokenId}
                   image={nfts.image}
                   marketId={nfts.marketId}
+                  
                 />
               ))
             }

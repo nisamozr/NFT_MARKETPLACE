@@ -2,7 +2,7 @@ import React ,{useState} from 'react'
 import {Link} from "react-router-dom"
 import "../style/Card.css"
 
-function Card({image,tokenId,name}) {
+function Card({image,tokenId,name,view}) {
     
   
     return (
