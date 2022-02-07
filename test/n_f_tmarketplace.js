@@ -28,7 +28,7 @@ contract("NFTmarketplace", function ( accounts) {
         assert.equal(tokenCount.toNumber(), 1)
     })
     it("create marketItem",async function(){
-        await contracts.createMarketplace(await nft.address, 1, 2, {from:accounts[0], value: 25000000000000000})
+        await contracts.createMarketplace(await nft.address, 1, 2,false, {from:accounts[0], value: 25000000000000000})
         const maplist = await contracts.idMarketItem(1)
         assert.equal(maplist.seller, accounts[0])
     })
@@ -39,11 +39,18 @@ contract("NFTmarketplace", function ( accounts) {
     })
     it("sell marketItem",async function(){
       await nft.approv({from: accounts[1]});
-
       await contracts.sellMarketplace(await nft.address, 1, 3 ,{from:accounts[1], value: 25000000000000000})
       const maplist = await contracts.idMarketItem(1)
       assert.equal(maplist.owner, contracts.address)
     })
+    it("create marketItem with auction",async function(){
+      await contracts.createMarketplace(await nft.address, 1, 2,true, {from:accounts[0], value: 25000000000000000})
+      const maplist = await contracts.idMarketItem(1)
+      assert.equal(maplist.seller, accounts[0])
+  })
+ 
+  
+    
    
   });
 

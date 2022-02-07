@@ -50,6 +50,7 @@
     background-color: rgb(243, 251, 254);
 
 }
+
 .r:hover{
     box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;
 }
@@ -151,4 +152,8 @@ margin-right: 5px;
 .displaynon{
     display: none;
 
+}
+.activeFocus{
+    background-color: rgb(68, 114, 131);
+    box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;
 }

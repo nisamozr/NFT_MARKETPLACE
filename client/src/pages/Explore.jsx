@@ -37,6 +37,9 @@ function Explore() {
         const tokenUri = await nftContract.tokenURI(id)
         const meta = await axios.get(tokenUri)
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+        const auctionData = await nftMarketplaceContract.auctions(i.tokenId)
+        const startingPrice = ethers.utils.formatUnits(auctionData.staringPrice.toString(), 'ether') 
+        console.log(startingPrice)
         let item = {
           price,
           tokenId: i.tokenId.toNumber(),
@@ -45,16 +48,23 @@ function Explore() {
           image: meta.data.image,
           name: meta.data.name,
           description: meta.data.description,
+          startingPrice:startingPrice
         }
 
         return item
       }),
     )
     setNfts(items)
+    // ationprice(items)
     setLoding("loaded")
-    console("gfs", items)
+
 
   }
+  // function ationprice(tokenId){
+  //   const auctionData = await nftMarketplaceContract.auctions(tokenId)
+
+  //   const startingPrice = auctionData.staringPrice
+  // }
   if (loading === "loaded" && !nfts.length) return (<h1> noitem in market</h1>)
 
   return (
@@ -68,7 +78,7 @@ function Explore() {
 
                 <Card
                   key={i}
-                  price={nfts.price}
+                  price={(nfts.price == 0)?nfts.startingPrice: nfts.price}
                   name={nfts.name}
                   tokenId={nfts.tokenId}
                   image={nfts.image}

@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ethers } from 'ethers'
-import {create as ipfsHttpClient} from "ipfs-http-client"
+import { create as ipfsHttpClient } from "ipfs-http-client"
 import { web3Provider } from '../context/web3'
-import {Buffer} from 'buffer';
+import { Buffer } from 'buffer';
 import '../style/Create.css'
-import {projectId, projectSecret} from "../config"
+import { projectId, projectSecret } from "../config"
 
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
 
@@ -18,16 +18,19 @@ const client = ipfsHttpClient(
       authorization: auth
     }
   }
-  )
+)
 
 function Create() {
   const route = useNavigate();
-  const {connection, signer ,nftMarketplaceContract,nftContract} = useContext(web3Provider)
+  const { connection, signer, nftMarketplaceContract, nftContract } = useContext(web3Provider)
   const fileRef = useRef(null)
   const [image, setImage] = useState()
   const [selecfile, setselecfile] = useState(null)
   const [fileUrl, setFileUrl] = useState(null)
-  const [formInput, updateFormInput] = useState({price: '', name: '', description: '' })
+  const [sell, setSell] = useState(null)
+
+ 
+  const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' })
 
   const ButtonClic = () => {
     fileRef.current.click()
@@ -44,27 +47,27 @@ function Create() {
       reader.readAsDataURL(e.target.files[0])
 
       const filed = e.target.files[0]
-    try {
-      const added = await client.add(filed
-      )
-      console.log(added)
-      const url = `https://ipfs.io/ipfs/${added.path}`
-      setFileUrl(url)
-    } catch (error) {
-      console.log('Error uploading file: ', error)
-    }  
+      try {
+        const added = await client.add(filed
+        )
+        console.log(added)
+        const url = `https://ipfs.io/ipfs/${added.path}`
+        setFileUrl(url)
+      } catch (error) {
+        console.log('Error uploading file: ', error)
+      }
     }
   }
 
-const createMarketitem = async ()=>{
-  const { name, description, price } = formInput
+  const createMarketitem = async () => {
+    const { name, description, price } = formInput
 
-    if (!name || !description || !price  || !fileUrl) return
+    if (!name || !description || !price || !fileUrl) return
 
     const data = JSON.stringify({
       name, description, image: fileUrl
     })
-  
+
     try {
       const added = await client.add(data)
       console.log(added)
@@ -72,25 +75,25 @@ const createMarketitem = async ()=>{
       createSale(url)
     } catch (error) {
       console.log('Error uploading file: ', error)
-    }  
-}
+    }
+  }
 
-async function createSale(url) {
-  let contract = nftContract
-  let transaction = await contract.createToken(url)
-  let tx = await transaction.wait()
-  let event = tx.events[0]
-  let value = event.args[2]
-  let tokenId = value.toNumber()
-  const price = ethers.utils.parseUnits(formInput.price, 'ether')
-  contract = nftMarketplaceContract;
-  let listingPrice = await contract.getListingPrice()
-  listingPrice = listingPrice.toString()
+  async function createSale(url) {
+    let contract = nftContract
+    let transaction = await contract.createToken(url)
+    let tx = await transaction.wait()
+    let event = tx.events[0]
+    let value = event.args[2]
+    let tokenId = value.toNumber()
+    const price = ethers.utils.parseUnits(formInput.price, 'ether')
+    contract = nftMarketplaceContract;
+    let listingPrice = await contract.getListingPrice()
+    listingPrice = listingPrice.toString()
 
-  transaction = await contract.createMarketplace(nftContract.address, tokenId,price ,{ value: listingPrice })
-  await transaction.wait()
-  route('/explore')
-}
+    transaction = await contract.createMarketplace(nftContract.address, tokenId, price, sell, { value: listingPrice })
+    await transaction.wait()
+    route('/explore')
+  }
 
   return (
     <div className="new">
@@ -137,16 +140,33 @@ async function createSale(url) {
                 rows="4"
               ></textarea>
             </div>
-            <div>
-              <input type="number" placeholder="Price" name="" id="" onChange={e => updateFormInput({ ...formInput, price: e.target.value })} />
+
+
+            <div className="typeButton">
+              <div className="col-6">
+                <button className={sell ? 'l': ' l activeFocus'} onClick={() => {
+                  setSell(false)
+                
+                }}>Fixed price</button>
+              </div>
+              <div className="col-6">
+                <button className={sell ? 'r activeFocus':'r'} onClick={() => {
+                 setSell(true)
+                }}> Time Auction</button>
+              </div>
             </div>
-          </div>
+          {/* </div> */}
+
           <div>
-            <button className="mintbuttun" onClick={createMarketitem}>Create</button>
+            <input type="number" placeholder={sell ? "Staring Price" :"Price"} name="" id="" onChange={e => updateFormInput({ ...formInput, price: e.target.value })} />
           </div>
+        </div>
+        <div>
+          <button className="mintbuttun" onClick={createMarketitem}>Create</button>
         </div>
       </div>
     </div>
+    </div >
   )
 }
 

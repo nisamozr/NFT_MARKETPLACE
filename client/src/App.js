@@ -88,7 +88,7 @@ function App() {
   return (
     <Router>
       <div className="App" >
-        <web3Provider.Provider value={{connection: provider,signer:signer,Balance: Balance, nftContract:nftContract, nftMarketplaceContract:nftMarketContract}}>
+        <web3Provider.Provider value={{ account:defaltAccount, connection: provider,signer:signer,Balance: Balance, nftContract:nftContract, nftMarketplaceContract:nftMarketContract}}>
         <Navbar connet = {walletConnectionHandel} account={defaltAccount} />
         <Routes>
           <Route exact path="/" element={<Home/>}>
