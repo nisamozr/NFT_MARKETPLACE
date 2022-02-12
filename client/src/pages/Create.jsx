@@ -7,6 +7,7 @@ import { Buffer } from 'buffer';
 import '../style/Create.css'
 import { projectId, projectSecret } from "../config"
 
+
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
 
 const client = ipfsHttpClient(
@@ -94,6 +95,7 @@ function Create() {
     await transaction.wait()
     route('/explore')
   }
+ 
 
   return (
     <div className="new">

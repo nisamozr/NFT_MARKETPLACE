@@ -19,16 +19,9 @@ function Explore() {
   useEffect(() => {
 
     loadNFT()
-
-
-  }, [connection])
-
-
+  })
+  
   async function loadNFT() {
-
-
-
-
     const data = await nftMarketplaceContract.fetchMarketItems()
     const items = await Promise.all(
       data.map(async (i) => {
@@ -55,16 +48,9 @@ function Explore() {
       }),
     )
     setNfts(items)
-    // ationprice(items)
     setLoding("loaded")
-
-
   }
-  // function ationprice(tokenId){
-  //   const auctionData = await nftMarketplaceContract.auctions(tokenId)
 
-  //   const startingPrice = auctionData.staringPrice
-  // }
   if (loading === "loaded" && !nfts.length) return (<h1> noitem in market</h1>)
 
   return (

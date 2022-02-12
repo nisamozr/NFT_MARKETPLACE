@@ -21,20 +21,12 @@ function Nft() {
   const [staringPrice, setStaringPrice] = useState(null)
   const [visibleTime, setvisibleTime] = useState(null)
   const [AutionEnd, setAutionEnd] = useState(null)
-
-
-
-
-
-
-
-
+  const [bidderlists, setBidderList] = useState([])
+  const[repress,setRefress] = useState(false)
 
   useEffect(() => {
     loadNFT()
-    // auctioin()
-    // widroval()
-  }, [])
+  },[repress])
 
   async function loadNFT() {
     if (view === "buy") {
@@ -61,20 +53,13 @@ function Nft() {
               description: meta.data.description,
               auction: i.auction,
               auctionId: i.auctionId
-
-
             }
-
             setNft(item)
             auctioin(item.tokenId)
             return item
           }
         }),
       )
-
-
-
-
     }
     else if (view === "my") {
       const data = await nftMarketplaceContract.fetchMyNFTs()
@@ -135,12 +120,10 @@ function Nft() {
 
     }
   }
+
   async function auctioin(tokenId) {
     if (view == "buy") {
       const auctionData = await nftMarketplaceContract.auctions(tokenId)
-      console.log(auctionData)
-
-
       const rstart = auctionData.duration.toNumber()
       const startingPrice = auctionData.staringPrice
       const Sprice = ethers.utils.formatUnits(startingPrice.toString(), 'ether')
@@ -149,12 +132,8 @@ function Nft() {
       setStaringPrice(Sprice)
       const currentTime = Date.now();
       let presentTime = new Date(currentTime).toLocaleString();
-      console.log("bhdh", saleEnd, presentTime)
-
-      // const BI = await nftMarketplaceContract.bidders(tokenId)
-      //     console.log(BI)
-      console.log("bbb", auctionData)
-      console.log(account)
+      const bidderList = await nftMarketplaceContract.getBidder(tokenId)
+      setBidderList(bidderList)
       if (presentTime >= saleEnd) {
         setvisibleTime(true)
         console.log(auctionData.seller.toLowerCase())
@@ -166,9 +145,6 @@ function Nft() {
           console.log("wedroval")
 
         }
-
-
-
       }
     }
   }
@@ -178,8 +154,6 @@ function Nft() {
     await buy.wait()
     route('/explore')
   }
-  const [prices, setPrice] = useState(null);
-  const [sellPrice, setSells] = useState(null)
 
   const BidAlert = async () => {
     const { value: price } = await Swal.fire({
@@ -191,41 +165,50 @@ function Nft() {
     })
 
     if (price) {
-      // Swal.fire(`Entered email: ${price}`)
       bid(price)
     }
-
-
   }
 
   const bid = async (bidPrice) => {
-    // let listingPrice = await nftMarketplaceContract.getListingPrice()
-    //   listingPrice = listingPrice.toString()
-    const price = ethers.utils.parseUnits(bidPrice.toString(), 'ether')
-    // let price = ethers.utils.formatUnits(prices.toString(), 'ether')
-    console.log(price, "hbjd")
-    const buy = await nftMarketplaceContract.bid(nft.tokenId, { value: price })
-    await buy.wait()
-    Swal.fire(`Your bid placed at : ${bidPrice} ETH`)
+    try {
+      const price = ethers.utils.parseUnits(bidPrice.toString(), 'ether')
+      console.log(price, "hbjd")
+      const buy = await nftMarketplaceContract.bid(nft.tokenId, { value: price })
+      await buy.wait()
+      Swal.fire(`Your bid placed at : ${bidPrice} ETH`)
+      setRefress(!repress)
+  } catch (e) {
+    if( e.data.message == "VM Exception while processing transaction: revert you alreay bided"){
 
+     
+      Swal.fire({
+        icon: 'error',
+        title: 'You are already Bidder',
+      })
+    }else if("VM Exception while processing transaction: revert Price shoud be gratterer than highst bider" == e.data.message)
+    {
 
+     
+      Swal.fire({
+        icon: 'error',
+        title: 'Bidder amount should greater than the previous bidder ',
+      })
+    }
+
+     
+  } 
+   
   }
   const withdraw = async () => {
     console.log(nft.tokenId)
     withdrawAcrion(nft.tokenId)
   }
   const withdrawAcrion = async (tokenId) => {
-
-
     console.log(tokenId, "withdraw")
     const buy = await nftMarketplaceContract.finish(nftaddress, tokenId)
     await buy.wait()
     route('/explore')
-
-
   }
-
-
 
   return (
     <div className="new">
@@ -235,6 +218,35 @@ function Nft() {
             <div className="nftbox">
               <img src={nft.image} alt="" />
             </div>
+            {(!AutionEnd && !visibleTime ) ?
+              <div className="bidderlist">
+                <div className="bidlist">
+
+                  <table>
+                    <tr>
+                      <th>#</th>
+                      <th>Address</th>
+                      <th> ETH</th>
+                      <th>Time</th>
+                    </tr>
+                    {
+                      bidderlists.map((obj, i) => {
+                        return (
+                          <tr>
+                            <td>{i + 1}</td>
+                            <td className='addTable'>{obj.addr}</td>
+                            <td>{ethers.utils.formatUnits(obj.amount.toString(), 'ether')}24 </td>
+                            <td>{new Date(obj.bitAt * 1000).toLocaleString()}</td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </table>
+                </div>
+              </div>
+              : ""
+
+            }
           </div>
           <div className="col-md-5">
             <div className="nftDes">
@@ -261,9 +273,6 @@ function Nft() {
                         </div>
                         :
                         " "
-
-
-
                       :
                       <div className="bidbody">
                         <div className="time">
@@ -295,10 +304,7 @@ function Nft() {
                     </div>
                   :
                   <div className="buy">
-
                     <Link to={`/sell/${id}`}> <button className="btn2 connect" >Sell Now</button> </Link>
-
-
                   </div>
               }
             </div>
